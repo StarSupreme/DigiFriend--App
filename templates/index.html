@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        #chatbot-response {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: white;
+            color: black;
+            font-size: 24px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>DigiFriend</h1>
+    <button id="speak-button">Speak</button>
+    <img id="emotion-image" src="{{ url_for('static', filename=final_emotion + '.png') }}">
+    <div id="chatbot-response"></div>
+    <script>
+        const speakButton = document.getElementById('speak-button')
+
+        speakButton.addEventListener('click', () => {
+            const recognition = new webkitSpeechRecognition()
+            recognition.continuous = false
+            recognition.lang = 'en-US'
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript
+
+                const formData = new FormData()
+                formData.append('user_input', transcript)
+
+                fetch('/listen', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `user_input=${encodeURIComponent(transcript)}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('chatbot-response').innerText = data
+                    const tts = new SpeechSynthesisUtterance(data)
+                    window.speechSynthesis.speak(tts)
+                })
+                .catch(error => console.error('Error:', error))
+            }
+
+            recognition.start()
+        })
+
+        // Speak the intro line for the selected emotion
+        const finalEmotion = "{{ final_emotion }}"
+        if (!session.pageLoaded) {
+            session.pageLoaded = true
+            speakEmotionLine(finalEmotion)
+        }
+
+        function speakEmotionLine(emotion) {
+            let line = ""
+            switch (emotion) {
+                case "happy":
+                    line = "Someone seems happy!"
+                    break
+                case "angry":
+                    line = "You have a bad temper now, what's the matter?"
+                    break
+                case "sad":
+                    line = "Someone is sad, what is the matter?"
+                    break
+                case "surprise":
+                    line = "OMG! What just happened?"
+                    break
+                case "neutral":
+                    line = "Hi, how are you?"
+                    break
+                case "disgust":
+                    line = "What is that?!"
+                    break
+                case "fear":
+                    line = "Woah! What just happened?!"
+                    break
+                default:
+                    line = "Hello there!"
+                    break
+            }
+            const tts = new SpeechSynthesisUtterance(line)
+            window.speechSynthesis.speak(tts)
+        }
+    </script>
+</body>
+</html>
