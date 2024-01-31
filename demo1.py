@@ -237,7 +237,6 @@ def perform_real_time_prediction():
             break
 
         print("Emotion: " + final_emotion)
-    return final_emotion
 
 
 def get_corpus_file_path(emotion):
