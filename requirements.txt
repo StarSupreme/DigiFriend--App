@@ -56,7 +56,7 @@ moviepy==1.0.3
 msgpack==1.0.5
 murmurhash==1.0.10
 nltk==3.7
-numba==0.56.2
+numba==0.40.0
 numpy==1.21.6
 oauthlib==3.2.2
 opencv-contrib-python==4.9.0.80
