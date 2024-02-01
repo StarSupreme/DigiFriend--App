@@ -28,7 +28,7 @@ gast==0.4.0
 google-auth==2.27.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
-grpcio==1.28.2
+grpcio==1.28.1
 gTTS==2.5.1
 gunicorn==21.2.0
 h5py==3.8.0
