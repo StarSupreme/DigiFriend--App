@@ -1,5 +1,5 @@
 absl-py==2.1.0
-setuptools==69.0.3
+setuptools==68.0.0
 astunparse==1.6.3
 audioread==3.0.1
 blis==0.7.11
